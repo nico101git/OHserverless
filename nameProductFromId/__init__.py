@@ -22,7 +22,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(json.dumps(res),
         status_code=200, mimetype="application/json")
     else:
+        res={}
+        res["error"]="This HTTP triggered function executed successfully. Pass a productId in the query string or in the request body for a personalized response."
         return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a productId in the query string or in the request body for a personalized response.",
-             status_code=400
+             json.dumps(res),
+             status_code=400,
+             mimetype="application/json"
         )
