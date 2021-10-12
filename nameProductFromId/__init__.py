@@ -1,6 +1,7 @@
 import logging
 
 import azure.functions as func
+import json
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
@@ -16,8 +17,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             productId = req_body.get('productId')
 
     if productId:
-        return func.HttpResponse(f"The product name for your product id {productId} is Starfruit Explosion",
-        status_code=200)
+        res={}
+        res["data"]=productId
+        return func.HttpResponse(json.dumps(res),
+        status_code=200, mimetype="application/json")
     else:
         return func.HttpResponse(
              "This HTTP triggered function executed successfully. Pass a productId in the query string or in the request body for a personalized response.",

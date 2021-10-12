@@ -1,0 +1,99 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "HTTP": {
+                "inputs": {
+                    "method": "GET",
+                    "uri": "https://namefromproductidgg.azurewebsites.net/api/nameProductFromId?productId=75542e38-563f-436f-adeb-f426f1dabb5c"
+                },
+                "runAfter": {},
+                "type": "Http"
+            },
+            "Parse_JSON": {
+                "inputs": {
+                    "content": "@body('HTTP')",
+                    "schema": {
+                        "properties": {
+                            "body": {
+                                "type": "string"
+                            },
+                            "headers": {
+                                "properties": {
+                                    "Content-Length": {
+                                        "type": "string"
+                                    },
+                                    "Content-Type": {
+                                        "type": "string"
+                                    },
+                                    "Date": {
+                                        "type": "string"
+                                    },
+                                    "Request-Context": {
+                                        "type": "string"
+                                    },
+                                    "Server": {
+                                        "type": "string"
+                                    },
+                                    "Transfer-Encoding": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "statusCode": {
+                                "type": "integer"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "HTTP": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Response": {
+                "inputs": {
+                    "body": "@body('HTTP')",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "statusCode": 200
+                },
+                "kind": "Http",
+                "runAfter": {
+                    "Parse_JSON": [
+                        "Succeeded"
+                    ]
+                },
+                "type": "Response"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "parameters": {},
+        "triggers": {
+            "manual": {
+                "inputs": {
+                    "schema": {
+                        "headers": {
+                            "Content-Type": "application/json"
+                        },
+                        "properties": {
+                            "productId": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "kind": "Http",
+                "type": "Request"
+            }
+        }
+    },
+    "parameters": {}
+}
